@@ -34,6 +34,14 @@
   background: #f4f4f4;
 }
 
+.search__input-error {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #ee3465;
+  margin-bottom: 30px;
+}
+
 .search__button {
   padding: 0;
   border: none;
@@ -101,7 +109,6 @@
   .search__input {
     font-size: 14px;
     line-height: 20px;
-
   }
 
   .search__button-icon {
@@ -117,19 +124,16 @@
   .search__form {
     width: 92%;
   }
-
 }
 
 @media screen and (max-width: 450px) {
   .search__form {
     width: 90%;
   }
-
 }
 
 @media screen and (max-width: 350px) {
   .search__form {
     width: 87%;
   }
-
 }
