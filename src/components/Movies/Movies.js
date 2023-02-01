@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Movies.css";
 import Header from "../Header/Header";
 import SearchForm from "../SearchForm/SearchForm";
@@ -6,85 +6,120 @@ import Preloader from "../Preloader/Preloader";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Footer from "../Footer/Footer";
 import useResizeWindow from "../../hooks/useResizeWindow";
-import {
-  LARGE_SCREEN_WIDTH,
-  LARGE_SCREEN_WIDTH_SHOW,
-  LARGE_SCREEN_WIDTH_ADD,
-  MEDIUM_SCREEN_WIDTH,
-  MEDIUM_SCREEN_WIDTH_SHOW,
-  MEDIUM_SCREEN_WIDTH_ADD,
-  SMALL_SCREEN_WIDTH,
-  SMALL_SCREEN_WIDTH_SHOW,
-  SMALL_SCREEN_WIDTH_ADD,
-  SMALLEST_SCREEN_WIDTH_SHOW,
-} from "../../utils/constants.js";
+import { moviesApi } from "../../utils/MoviesApi";
+import { mainApi } from "../../utils/MainApi";
 
-function Movies({
-  loggedIn,
-  isLoading,
-  movies,
-  savedMovies,
-  onSearchMovies,
-  nothingFoundServer,
-  isBadServerRequest,
-  isWasRequest,
-  onMovieSave,
-  onMovieDelete,
-  checked,
-  onChangeСheckbox,
-  localStorageTextValue,
-}) {
+function Movies({ loggedIn }) {
   const size = useResizeWindow();
-  const [moviesShow, setMoviesShow] = React.useState(0);
-  const [moviesAdd, setMoviesAdd] = React.useState(0);
+  const [numberMoviesShow, setNumberMoviesShow] = useState(0);
+  const [numberMoviesAdd, setNumberMoviesAdd] = useState(0);
 
-  React.useEffect(() => {
-    if (size > LARGE_SCREEN_WIDTH) {
-      setMoviesShow(LARGE_SCREEN_WIDTH_SHOW);
-      setMoviesAdd(LARGE_SCREEN_WIDTH_ADD);
-    } else if (size > MEDIUM_SCREEN_WIDTH) {
-      setMoviesShow(MEDIUM_SCREEN_WIDTH_SHOW);
-      setMoviesAdd(MEDIUM_SCREEN_WIDTH_ADD);
-    } else if (size > SMALL_SCREEN_WIDTH) {
-      setMoviesShow(SMALL_SCREEN_WIDTH_SHOW);
-      setMoviesAdd(SMALL_SCREEN_WIDTH_ADD);
-    } else {
-      setMoviesShow(SMALLEST_SCREEN_WIDTH_SHOW);
-      setMoviesAdd(SMALL_SCREEN_WIDTH_ADD);
+  const sizeConstant = {
+    large: {
+      width: 1024,
+      moviesShow: 12,
+      moviesAdd: 4,
+    },
+    medium: {
+      width: 800,
+      moviesShow: 9,
+      moviesAdd: 3,
+    },
+    small: {
+      width: 600,
+      moviesShow: 8,
+      moviesAdd: 2,
+    },
+    smallest: {
+      width: 450,
+      moviesShow: 5,
+      moviesAdd: 2,
+    },
+  };
+
+  useEffect(() => {
+    if (size.width >= sizeConstant.large.width) {
+      setNumberMoviesShow(sizeConstant.large.moviesShow);
+      setNumberMoviesAdd(sizeConstant.large.moviesAdd);
+    } else if (size.width >= sizeConstant.medium.width) {
+      setNumberMoviesShow(sizeConstant.medium.moviesShow);
+      setNumberMoviesAdd(sizeConstant.medium.moviesAdd);
+    } else if (size.width >= sizeConstant.small.width) {
+      setNumberMoviesShow(sizeConstant.small.moviesShow);
+      setNumberMoviesAdd(sizeConstant.small.moviesAdd);
+    } else if (size.width >= sizeConstant.smallest.width) {
+      setNumberMoviesShow(sizeConstant.smallest.moviesShow);
+      setNumberMoviesAdd(sizeConstant.smallest.moviesAdd);
     }
-  }, [size]);
+  }, [size.width]);
 
-  function handleAddMovies() {
-    setMoviesShow(moviesShow + moviesAdd);
-  }
+  const handleMoviesAdd = () => {
+    setNumberMoviesShow(numberMoviesShow + numberMoviesAdd);
+  };
+
+  const [movies, setMovies] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const filter = (cards, { name = "", shorts = false } = {}) => {
+    const filteredCards = cards.filter((card) => {
+      const isName = card.nameRU.includes(name);
+      if (shorts) {
+        return card.duration <= 40 && isName;
+      }
+      return isName;
+    });
+    setFilteredMovies(filteredCards);
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    moviesApi.getAllMovies().then((cards) => {
+      setMovies(cards);
+      filter(cards);
+      setIsLoading(false);
+    });
+  }, []);
+
+  const saveCard = (beatCard) => {
+    const newCard = {
+    country: beatCard.country,
+    director: beatCard.director,
+    duration: beatCard.duration,
+    year: beatCard.year,
+    description: beatCard.description,
+    image: `https://api.nomoreparties.co${beatCard.image.url}`,
+    trailerLink: beatCard.trailerLink,
+    nameRU: beatCard.nameRU,
+    nameEN: beatCard.nameEN,
+    thumbnail: `https://api.nomoreparties.co${beatCard.image.formats.thumbnail.url}`,
+    movieId: beatCard.id,
+    };
+    mainApi.saveMovie(newCard).then((savedCard) => {
+      const newMovies = moviesApi.saveMovie(savedCard);
+      setMovies(newMovies);
+      filter(newMovies);
+    });
+  };
+
+  const deleteCard = (mainCard) => {
+    mainApi.deleteMovie(mainCard._id).then(() => {
+      const newMovies = moviesApi.deleteMovie(mainCard._id);
+      setMovies(newMovies);
+      filter(newMovies);
+    });
+  };
+
+  const updateCard = (card) => (card.saved ? deleteCard(card) : saveCard(card));
 
   return (
     <>
       <Header loggedIn={loggedIn} />
-      <main>
-        <SearchForm
-          onSearchMovies={onSearchMovies}
-          checked={checked}
-          onChangeСheckbox={onChangeСheckbox}
-          localStorageTextValue={localStorageTextValue}
-        />
-        {isLoading ? (
-          <Preloader />
-        ) : (
-          <MoviesCardList
-            movies={movies}
-            savedMovies={savedMovies}
-            moviesShow={moviesShow}
-            onAddMovies={handleAddMovies}
-            checked={checked}
-            isBadServerRequest={isBadServerRequest}
-            nothingFoundServer={nothingFoundServer}
-            isWasRequest={isWasRequest}
-            onMovieSave={onMovieSave}
-            onMovieDelete={onMovieDelete}
-          />
-        )}
-      </main>
+      <SearchForm />
+      {isLoading && <Preloader />}
+
+      <MoviesCardList movies={filteredMovies} updateCard={updateCard} />
+
       <Footer />
     </>
   );

@@ -12,14 +12,12 @@ function Main({ loggedIn }) {
   return (
     <div>
       <Header loggedIn={loggedIn} isMainHeader={true} />
-      <main>
-        <Promo />
-        <NavTab />
-        <AboutProject />
-        <Techs />
-        <AboutMe />
-        <Portfolio />
-      </main>
+      <Promo />
+      <NavTab />
+      <AboutProject />
+      <Techs />
+      <AboutMe />
+      <Portfolio />
       <Footer />
     </div>
   );

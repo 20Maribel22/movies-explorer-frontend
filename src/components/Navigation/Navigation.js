@@ -28,7 +28,7 @@ function Navigation() {
               <NavLink
                 className={({ isActive }) => `navigation__link
               ${isActive && " navigation__link_active"}`}
-                exact
+                
                 to="/"
               >
                 Главная

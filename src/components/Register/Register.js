@@ -1,14 +1,37 @@
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import "./Register.css";
 import logo from "../../images/logo/logo.svg";
 import useFormValidation from "../../hooks/useFormValidation";
 
-function Register({ onRegister, isBadRequest, message }) {
+function Register({ handleRegister, statusRegister }) {
   const { pathname } = useLocation();
   const registerButtonClassName = `register__button ${
     pathname === "/signin" ? "register__button_type_login" : ""
   }`;
+
+  const [isMessage, setIsMessage] = useState("");
+
+  function handleMessage() {
+    if (statusRegister) {
+      switch (statusRegister) {
+        case 409:
+          setIsMessage("Пользователь с такими данными уже существует");
+          break;
+        case 500:
+          setIsMessage("Ошибка на сервере.");
+          break;
+        default:
+          setIsMessage("Произошла ошибка. Попробуйте позже");
+          break;
+      }
+    }
+  }
+
+  useEffect(() => {
+    handleMessage();
+  }, [statusRegister]);
 
   const { values, errors, isValid, handleChange } = useFormValidation();
 
@@ -17,7 +40,7 @@ function Register({ onRegister, isBadRequest, message }) {
   function handleSubmit(e) {
     e.preventDefault();
     if (isValid) {
-      onRegister(name, email, password);
+      handleRegister(name, email, password);
     }
   }
 
@@ -43,7 +66,9 @@ function Register({ onRegister, isBadRequest, message }) {
             onChange={handleChange}
             required
           />
-          <span className="register__input-error">{errors.name}</span>
+          <span className="register__input-error name-input-error">
+            {errors.name}
+          </span>
         </label>
         <label className="register__label">
           E-mail
@@ -61,7 +86,9 @@ function Register({ onRegister, isBadRequest, message }) {
             onChange={handleChange}
             required
           />
-          <span className="register__input-error">{errors.email}</span>
+          <span className="register__input-error email-input-error">
+            {errors.email}
+          </span>
         </label>
         <label className="register__label">
           Пароль
@@ -74,17 +101,13 @@ function Register({ onRegister, isBadRequest, message }) {
             placeholder="пароль"
             minLength="8"
             maxLength="200"
+            required
             value={password || ""}
             onChange={handleChange}
-            required
           />
           <span className="register__input-error">{errors.password}</span>
         </label>
-        {isBadRequest ? (
-          <span className="register__message">{message}</span>
-        ) : (
-          ""
-        )}
+        <span className="register__message">{isMessage}</span>
         <button
           className={registerButtonClassName}
           type="submit"

@@ -2,9 +2,9 @@
   padding: 70px 70px 0;
 }
 
-.movies-cards_nothing_hiddden {
+/* .movies-cards_nothing_hiddden {
   display: none;
-}
+} */
 
 .movies-cards__list {
   display: grid;

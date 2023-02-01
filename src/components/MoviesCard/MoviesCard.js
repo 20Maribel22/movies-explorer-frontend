@@ -1,19 +1,10 @@
 import "./MoviesCard.css";
 import { useLocation } from "react-router-dom";
 
-function MoviesCard({ movie, savedMovies, onMovieSave, onMovieDelete }) {
+function MoviesCard({ movie, updateCard }) {
   const { pathname } = useLocation();
-  const { nameRU, duration, image, trailerLink } = movie;
+  const { nameRU, duration, trailerLink, image, saved } = movie;
   const durationCalc = `${Math.trunc(duration / 60)}ч ${duration % 60}м`;
-  const isSaved = savedMovies.some((item) => item.movieId === movie.id);
-
-  const handleFavoriteClick = () => {
-    onMovieSave(movie);
-  };
-
-  function handleDeleteClick() {
-    onMovieDelete(movie);
-  }
 
   return (
     <li className="movie-card">
@@ -23,27 +14,23 @@ function MoviesCard({ movie, savedMovies, onMovieSave, onMovieDelete }) {
         target="_blank"
         rel="noreferrer"
       >
-        <img
-          className="movie-card__image"
-          src={image.url ? `https://api.nomoreparties.co${image.url}` : image}
-          alt={nameRU}
-        />
+        <img className="movie-card__image" src={image.url ? `https://api.nomoreparties.co${image.url}` : image} alt={nameRU} />
       </a>
       <div className="movie-card__description">
         <p className="movie-card__title">{nameRU}</p>
         {pathname === "/movies" ? (
           <button
             className={`movie-card__save-button ${
-              isSaved ? "movie-card__save-button_active" : ""
+              saved ? "movie-card__save-button_active" : ""
             }`}
             type="button"
-            onClick={isSaved ? handleDeleteClick : handleFavoriteClick}
+            onClick={() => updateCard(movie)}
           ></button>
         ) : (
           <button
             className="movie-card__delete-button"
             type="button"
-            onClick={handleDeleteClick}
+            onClick={() => updateCard(movie)}
           ></button>
         )}
       </div>

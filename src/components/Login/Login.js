@@ -1,14 +1,40 @@
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import "./Login.css";
 import logo from "../../images/logo/logo.svg";
 import useFormValidation from "../../hooks/useFormValidation";
 
-function Login({ onLogin, isBadRequest, message }) {
+function Login({ handleLogin, statusLogin }) {
   const { pathname } = useLocation();
   const registerButtonClassName = `register__button ${
     pathname === "/signin" ? "register__button_type_login" : ""
   }`;
+
+  const [isMessage, setIsMessage] = useState("");
+
+  function handleMessage() {
+    if (statusLogin) {
+      switch (statusLogin) {
+        case 400:
+        case 401:
+          setIsMessage("Неправильный логин или пароль");
+          break;
+        case 500:
+          setIsMessage("Ошибка на сервере.");
+          break;
+        default:
+          setIsMessage(
+            "Произошла ошибка. Попробуйте позже"
+          );
+          break;
+      }
+    }
+  }
+
+  useEffect(() => {
+    handleMessage();
+  }, [statusLogin]);
 
   const { values, errors, isValid, handleChange } = useFormValidation();
 
@@ -17,7 +43,7 @@ function Login({ onLogin, isBadRequest, message }) {
   function handleSubmit(e) {
     e.preventDefault();
     if (isValid) {
-      onLogin(email, password);
+      handleLogin(email, password);
     }
   }
 
@@ -63,10 +89,16 @@ function Login({ onLogin, isBadRequest, message }) {
             onChange={handleChange}
             required
           />
-          <span className="register__input-error password-input-error">{errors.password}</span>
+          <span className="register__input-error password-input-error">
+            {errors.password}
+          </span>
         </label>
-        {isBadRequest ? <span className="register__message">{message}</span> : ""}
-        <button className={registerButtonClassName} type="submit" disabled={!isValid}>
+        <span className="register__message">{isMessage}</span>
+        <button
+          className={registerButtonClassName}
+          type="submit"
+          disabled={!isValid}
+        >
           Войти
         </button>
       </form>

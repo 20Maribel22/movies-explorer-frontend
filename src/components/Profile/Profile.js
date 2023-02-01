@@ -1,25 +1,21 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./Profile.css";
 import Header from "../Header/Header";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import useFormValidation from "../../hooks/useFormValidation";
 
-function Profile({
-  loggedIn,
-  onUpdateUser,
-  isSuccessRequest,
-  isBadRequest,
-  message,
-  handleLogout,
-}) {
-  const currentUser = React.useContext(CurrentUserContext);
-  const [isUserInfo, setIsUserInfo] = React.useState(false);
+function Profile({ loggedIn, onUpdateUser, statusUser, handleLogout }) {
+  const currentUser = useContext(CurrentUserContext);
+  const [isUserInfo, setIsUserInfo] = useState(false);
+
   const { values, errors, isValid, handleChange, resetFrom } =
     useFormValidation();
   const { name = currentUser.data.name, email = currentUser.data.email } =
     values;
 
-  React.useEffect(() => {
+  const [isMessage, setIsMessage] = useState("");
+
+  useEffect(() => {
     setIsUserInfo(
       name === currentUser.data.name && email === currentUser.data.email
     );
@@ -32,6 +28,30 @@ function Profile({
       resetFrom();
     }
   }
+
+  function handleMessage() {
+    if (statusUser) {
+      switch (statusUser) {
+        case 200:
+          setIsMessage("Данные обновлены");
+          break;
+        case 409:
+          setIsMessage("Пользователь с такими данными уже существует");
+          break;
+        case 500:
+          setIsMessage("Ошибка на сервере.");
+          break;
+        default:
+          setIsMessage("Произошла ошибка. Попробуйте позже");
+          break;
+      }
+    }
+  }
+
+  useEffect(() => {
+    handleMessage();
+  }, [statusUser]);
+
   return (
     <>
       <Header loggedIn={loggedIn} />
@@ -58,7 +78,7 @@ function Profile({
               onChange={handleChange}
               required
             />
-            <span className="profile__input-error">{errors.name}</span>
+            <span className="name-input-error">{errors.name}</span>
           </label>
           <label className="profile__label">
             E-mail
@@ -76,13 +96,12 @@ function Profile({
               onChange={handleChange}
               required
             />
-            <span className="profile__input-error">{errors.email}</span>
+            <span className="profile__input-error email-input-error">
+              {errors.email}
+            </span>
           </label>
-          {isSuccessRequest || isBadRequest ? (
-            <span className="profile__edit-message">{message}</span>
-          ) : (
-            ""
-          )}
+          <span className="profile__edit-message">{isMessage}</span>
+
           <button
             className="profile__submit-button"
             type="submit"
