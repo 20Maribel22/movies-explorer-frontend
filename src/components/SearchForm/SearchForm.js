@@ -5,18 +5,22 @@ import search from "../../images/find.svg";
 import find from "../../images/find-icon.svg";
 import useFormValidation from "../../hooks/useFormValidation";
 
-function SearchForm({ onSearchMovies, filtercheckbox, onChangeСheckbox }) {
-  const [errorText, setErrorText] = React.useState("");
+function SearchForm({ onSearchMovies, savedSearch={}   }) {
+  const [errorText, setErrorText] = useState("");
   const { values, isValid, handleChange } = useFormValidation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isValid) {
-      onSearchMovies(values.search);
+      onSearchMovies(values);
     } else {
       setErrorText("Нужно ввеcти ключевое слово.");
     }
   };
+
+const onChangeСheckbox =(e) => {
+  handleChange(e);
+}
 
   return (
     <section className="search">
@@ -31,9 +35,9 @@ function SearchForm({ onSearchMovies, filtercheckbox, onChangeСheckbox }) {
           <input
             className="search__input"
             type="text"
-            name="search"
+            name="name"
             placeholder="Фильм"
-            value={values.search || ""}
+            value={values.name || savedSearch.name || ""}
             onChange={handleChange}
           />
           <button className="search__button" type="subit">
@@ -41,7 +45,7 @@ function SearchForm({ onSearchMovies, filtercheckbox, onChangeСheckbox }) {
           </button>
         </form>
         <FilterCheckbox
-          filtercheckbox={filtercheckbox}
+          filtercheckbox={values.shorts || savedSearch.shorts || false}
           handleCheckbox={onChangeСheckbox}
         />
       </div>

@@ -2,10 +2,6 @@
   padding: 70px 70px 0;
 }
 
-/* .movies-cards_nothing_hiddden {
-  display: none;
-} */
-
 .movies-cards__list {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -17,10 +13,12 @@
 }
 
 .movies-cards__nothing {
+  display: flex;
   font-weight: 500;
   font-size: 16px;
   line-height: 20px;
   text-align: center;
+  justify-content: center;
   color: #EE3465;
   margin: 0;
 }

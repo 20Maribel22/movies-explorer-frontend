@@ -46,6 +46,7 @@ class MoviesApi {
     this._movies = this._movies.map((movie) => {
       if (movie.id === film.movieId) {
         movie.saved = true;
+        movie._id = film._id;
       }
       return movie;
     });
@@ -56,7 +57,7 @@ class MoviesApi {
 
   deleteMovie(movieId) {
     this._movies = this._movies.map((movie) => {
-      if (movie.id === movieId) {
+      if (movie._id === movieId) {
         movie.saved = false;
       }
       return movie;

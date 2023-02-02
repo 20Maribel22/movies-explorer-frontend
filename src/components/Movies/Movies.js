@@ -5,14 +5,21 @@ import SearchForm from "../SearchForm/SearchForm";
 import Preloader from "../Preloader/Preloader";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Footer from "../Footer/Footer";
-import useResizeWindow from "../../hooks/useResizeWindow";
 import { moviesApi } from "../../utils/MoviesApi";
 import { mainApi } from "../../utils/MainApi";
+import useResizeWindow from "../../hooks/useResizeWindow";
 
 function Movies({ loggedIn }) {
   const size = useResizeWindow();
   const [numberMoviesShow, setNumberMoviesShow] = useState(0);
   const [numberMoviesAdd, setNumberMoviesAdd] = useState(0);
+
+  const [movies, setMovies] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(false);
+
+  const savedSearch = JSON.parse(localStorage.getItem("search") || "{}");
 
   const sizeConstant = {
     large: {
@@ -47,21 +54,21 @@ function Movies({ loggedIn }) {
     } else if (size.width >= sizeConstant.small.width) {
       setNumberMoviesShow(sizeConstant.small.moviesShow);
       setNumberMoviesAdd(sizeConstant.small.moviesAdd);
-    } else if (size.width >= sizeConstant.smallest.width) {
+    } else {
       setNumberMoviesShow(sizeConstant.smallest.moviesShow);
       setNumberMoviesAdd(sizeConstant.smallest.moviesAdd);
     }
   }, [size.width]);
 
   const handleMoviesAdd = () => {
+    console.log(numberMoviesShow, numberMoviesAdd);
     setNumberMoviesShow(numberMoviesShow + numberMoviesAdd);
   };
 
-  const [movies, setMovies] = useState([]);
-  const [filteredMovies, setFilteredMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
+ 
   const filter = (cards, { name = "", shorts = false } = {}) => {
+    localStorage.setItem("search", JSON.stringify({ name, shorts }));
+    setIsFiltered(true);
     const filteredCards = cards.filter((card) => {
       const isName = card.nameRU.includes(name);
       if (shorts) {
@@ -76,24 +83,24 @@ function Movies({ loggedIn }) {
     setIsLoading(true);
     moviesApi.getAllMovies().then((cards) => {
       setMovies(cards);
-      filter(cards);
+      filter(cards, savedSearch);
       setIsLoading(false);
     });
   }, []);
 
   const saveCard = (beatCard) => {
     const newCard = {
-    country: beatCard.country,
-    director: beatCard.director,
-    duration: beatCard.duration,
-    year: beatCard.year,
-    description: beatCard.description,
-    image: `https://api.nomoreparties.co${beatCard.image.url}`,
-    trailerLink: beatCard.trailerLink,
-    nameRU: beatCard.nameRU,
-    nameEN: beatCard.nameEN,
-    thumbnail: `https://api.nomoreparties.co${beatCard.image.formats.thumbnail.url}`,
-    movieId: beatCard.id,
+      country: beatCard.country,
+      director: beatCard.director,
+      duration: beatCard.duration,
+      year: beatCard.year,
+      description: beatCard.description,
+      image: `https://api.nomoreparties.co${beatCard.image.url}`,
+      trailerLink: beatCard.trailerLink,
+      nameRU: beatCard.nameRU,
+      nameEN: beatCard.nameEN,
+      thumbnail: `https://api.nomoreparties.co${beatCard.image.formats.thumbnail.url}`,
+      movieId: beatCard.id,
     };
     mainApi.saveMovie(newCard).then((savedCard) => {
       const newMovies = moviesApi.saveMovie(savedCard);
@@ -115,10 +122,20 @@ function Movies({ loggedIn }) {
   return (
     <>
       <Header loggedIn={loggedIn} />
-      <SearchForm />
+      <SearchForm
+        savedSearch={savedSearch}
+        onSearchMovies={(search) => filter(movies, search)}
+      />
       {isLoading && <Preloader />}
 
-      <MoviesCardList movies={filteredMovies} updateCard={updateCard} />
+      <MoviesCardList
+        movies={filteredMovies.filter((c, i) => i < numberMoviesShow)}
+        hasLoad={filteredMovies.length >= numberMoviesShow}
+        updateCard={updateCard}
+        handleMoviesAdd={handleMoviesAdd}
+        isFiltered={isFiltered}
+        numberMoviesShow={numberMoviesShow}
+      />
 
       <Footer />
     </>

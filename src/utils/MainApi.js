@@ -103,7 +103,7 @@ class MainApi {
       .then((card) => {
         this._movies = this._movies.filter((movie) => movie._id !== movieId);
         localStorage.setItem("saved-movies", JSON.stringify(this._movies));
-        return card;
+        return this._movies;
       });
   }
 }

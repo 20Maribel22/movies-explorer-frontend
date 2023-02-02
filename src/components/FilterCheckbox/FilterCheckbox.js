@@ -6,8 +6,8 @@ function FilterCheckbox({ filtercheckbox, handleCheckbox }) {
       <input
         className="filter-checkbox__input"
         type="checkbox"
-        name="short-movies"
-        filtercheckbox={filtercheckbox}
+        name="shorts"
+        checked={filtercheckbox}
         onChange={handleCheckbox}
       />
       <p className="filter-checkbox__text">Короткометражки</p>
