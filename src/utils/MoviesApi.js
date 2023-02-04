@@ -53,9 +53,11 @@ class MoviesApi {
     localStorage.setItem("beatfilm-movies", JSON.stringify(this._movies));
 
     return this._movies;
+
   }
 
   deleteMovie(movieId) {
+
     this._movies = this._movies.map((movie) => {
       if (movie._id === movieId) {
         movie.saved = false;
@@ -65,6 +67,11 @@ class MoviesApi {
     localStorage.setItem("beatfilm-movies", JSON.stringify(this._movies));
     return this._movies;
   }
+
+ clearSavedMovies() {
+    this._movies=[];
+  }
+
 }
 
 export const moviesApi = new MoviesApi({

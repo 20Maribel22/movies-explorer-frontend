@@ -11,6 +11,7 @@ import PageNotFound from "../PageNotFound/PageNotFound";
 import { mainApi } from "../../utils/MainApi";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
+import { moviesApi } from "../../utils/MoviesApi";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -102,6 +103,8 @@ function App() {
     navigate("/");
     setLoggedIn(false);
     mainApi.setToken("");
+    mainApi.clearSavedMovies();
+    moviesApi.clearSavedMovies();
   };
 
   return (

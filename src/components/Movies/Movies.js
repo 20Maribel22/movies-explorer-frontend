@@ -65,7 +65,6 @@ function Movies({ loggedIn }) {
     setNumberMoviesShow(numberMoviesShow + numberMoviesAdd);
   };
 
-
   const filter = (cards, { name = "", shorts = false } = {}) => {
     localStorage.setItem("search", JSON.stringify({ name, shorts }));
     setIsFiltered(true);
@@ -102,8 +101,7 @@ function Movies({ loggedIn }) {
       thumbnail: `https://api.nomoreparties.co${beatCard.image.formats.thumbnail.url}`,
       movieId: beatCard.id,
     };
-    // const jwt = localStorage.getItem("jwt");
-    // mainApi.setToken(jwt);
+
     mainApi.saveMovie(newCard).then((savedCard) => {
       const newMovies = moviesApi.saveMovie(savedCard);
       setMovies(newMovies);
