@@ -36,7 +36,6 @@ const onChangeСheckbox =(e) => {
             className="search__input"
             type="text"
             name="name"
-            placeholder="Фильм"
             value={values.name || savedSearch.name || ""}
             onChange={handleChange}
           />
