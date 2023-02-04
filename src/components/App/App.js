@@ -52,10 +52,14 @@ function App() {
       .register(name, email, password)
       .then((res) => {
         if (res) {
-          navigate("/signin");
+          handleLogin(email, password);
+        } else {
+          setLoggedIn(false);
+          handleLogout();
         }
       })
       .catch((err) => {
+        setLoggedIn(false);
         setStatusRegister(err);
       });
   };
@@ -68,6 +72,8 @@ function App() {
           localStorage.setItem("jwt", data.token);
           setLoggedIn(true);
           navigate("/movies");
+        } else {
+          setLoggedIn(false);
         }
       })
       .catch((err) => {
@@ -92,7 +98,7 @@ function App() {
     setCurrentUser({});
     navigate("/");
     setLoggedIn(false);
-    
+    mainApi.setToken('');
   };
 
   return (
