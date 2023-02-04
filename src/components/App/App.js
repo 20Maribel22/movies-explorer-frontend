@@ -25,10 +25,12 @@ function App() {
     const jwt = localStorage.getItem("jwt");
     mainApi.setToken(jwt);
     if (jwt) {
-      mainApi.getUserInfo()
+      mainApi
+        .getUserInfo()
         .then((user) => {
           if (user) {
-            setCurrentUser(user);
+            console.log(user);
+            setCurrentUser(user.data);
             setLoggedIn(true);
           } else {
             handleLogout();
@@ -85,7 +87,8 @@ function App() {
     mainApi
       .setUserInfo(name, email)
       .then((user) => {
-        setCurrentUser(user);
+        console.log(user)
+        setCurrentUser(user.data);
         setStatusUser(200);
       })
       .catch((err) => {
@@ -98,7 +101,7 @@ function App() {
     setCurrentUser({});
     navigate("/");
     setLoggedIn(false);
-    mainApi.setToken('');
+    mainApi.setToken("");
   };
 
   return (

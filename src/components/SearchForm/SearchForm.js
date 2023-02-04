@@ -5,7 +5,7 @@ import search from "../../images/find.svg";
 import find from "../../images/find-icon.svg";
 import useFormValidation from "../../hooks/useFormValidation";
 
-function SearchForm({ onSearchMovies, savedSearch={}   }) {
+function SearchForm({ onSearchMovies, savedSearch={} }) {
   const [errorText, setErrorText] = useState("");
   const { values, isValid, handleChange } = useFormValidation();
 
@@ -20,6 +20,8 @@ function SearchForm({ onSearchMovies, savedSearch={}   }) {
 
 const onChangeСheckbox =(e) => {
   handleChange(e);
+  
+
 }
 
   return (

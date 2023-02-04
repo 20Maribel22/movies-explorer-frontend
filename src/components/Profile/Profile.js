@@ -4,22 +4,26 @@ import Header from "../Header/Header";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import useFormValidation from "../../hooks/useFormValidation";
 
+
+
 function Profile({ loggedIn, onUpdateUser, statusUser, handleLogout }) {
   const currentUser = useContext(CurrentUserContext);
   const [isUserInfo, setIsUserInfo] = useState(false);
 
+
   const { values, errors, isValid, handleChange, resetFrom } =
     useFormValidation();
-  const { name = currentUser.data.name, email = currentUser.data.email } =
+  const { name = currentUser.name, email = currentUser.email } =
     values;
 
   const [isMessage, setIsMessage] = useState("");
 
   useEffect(() => {
+
     setIsUserInfo(
-      name === currentUser.data.name && email === currentUser.data.email
+      name === currentUser.name && email === currentUser.email
     );
-  }, [name, email, currentUser.data.name, currentUser.data.email]);
+  }, [name, email, currentUser.name, currentUser.email]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -55,7 +59,8 @@ function Profile({ loggedIn, onUpdateUser, statusUser, handleLogout }) {
   return (
     <>
       <Header loggedIn={loggedIn} />
-      <section className="profile">
+
+     <section className="profile">
         <h2 className="profile__title">Привет, {name}!</h2>
         <form
           className="profile__form"

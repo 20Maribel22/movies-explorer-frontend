@@ -92,6 +92,7 @@ class MainApi {
         localStorage.setItem("saved-movies", JSON.stringify(this._movies));
         return card;
       });
+
   }
 
   deleteMovie(movieId) {
@@ -104,7 +105,8 @@ class MainApi {
         this._movies = this._movies.filter((movie) => movie._id !== movieId);
         localStorage.setItem("saved-movies", JSON.stringify(this._movies));
         return this._movies;
-      });
+      })
+      
   }
 }
 

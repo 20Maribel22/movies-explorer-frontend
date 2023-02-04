@@ -12,7 +12,7 @@
   position: relative;
   cursor: pointer;
   border-radius: 20px;
-  background-color: #2be080;
+  background-color: #ebebeb;
   appearance: none;
   transition: background-color 0.2s ease-in-out;
   box-sizing: border-box;
@@ -20,14 +20,14 @@
 }
 
 .filter-checkbox__input:checked {
-  background-color:  #ebebeb;
+  background-color:  #2be080;
 }
 
 .filter-checkbox__input::after {
   content: "";
   position: absolute;
   top: 6px;
-  right: 5px;
+  left: 5px;
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -36,7 +36,7 @@
 }
 
 .filter-checkbox__input:checked::after {
-  right: 22px;
+  left: 22px;
 }
 
 .filter-checkbox__text {
