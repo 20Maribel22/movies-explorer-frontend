@@ -9,14 +9,14 @@ import { mainApi } from "../../utils/MainApi";
 import { moviesApi } from "../../utils/MoviesApi";
 
 function SavedMovies({ loggedIn }) {
-  const [movies, setMovies] = useState([]); 
+  const [movies, setMovies] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
 
   const filter = (cards, { name = "", shorts = false } = {}) => {
     const filteredCards = cards.filter((card) => {
-      const isName = card.nameRU.includes(name);
+      const isName = card.nameRU.toLowerCase().includes(name.toLowerCase());
       if (shorts) {
         return card.duration <= 40 && isName;
       }

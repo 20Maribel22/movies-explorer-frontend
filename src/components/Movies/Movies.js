@@ -65,12 +65,12 @@ function Movies({ loggedIn }) {
     setNumberMoviesShow(numberMoviesShow + numberMoviesAdd);
   };
 
- 
+
   const filter = (cards, { name = "", shorts = false } = {}) => {
     localStorage.setItem("search", JSON.stringify({ name, shorts }));
     setIsFiltered(true);
     const filteredCards = cards.filter((card) => {
-      const isName = card.nameRU.includes(name);
+      const isName = card.nameRU.toLowerCase().includes(name.toLowerCase());
       if (shorts) {
         return card.duration <= 40 && isName;
       }

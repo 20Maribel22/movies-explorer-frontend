@@ -25,8 +25,7 @@ function App() {
     const jwt = localStorage.getItem("jwt");
     mainApi.setToken(jwt);
     if (jwt) {
-      mainApi
-        .getUserInfo()
+      mainApi.getUserInfo()
         .then((user) => {
           if (user) {
             setCurrentUser(user);
@@ -93,6 +92,7 @@ function App() {
     setCurrentUser({});
     navigate("/");
     setLoggedIn(false);
+    
   };
 
   return (
