@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
 import "./App.css";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
@@ -19,6 +19,7 @@ function App() {
   const [statusRegister, setStatusRegister] = useState(false);
   const [statusLogin, setStatusLogin] = useState(false);
   const [statusUser, setStatusUser] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
 
   let navigate = useNavigate();
 
@@ -33,6 +34,7 @@ function App() {
             console.log(user);
             setCurrentUser(user.data);
             setLoggedIn(true);
+            setIsAuth(true);
           } else {
             handleLogout();
           }
@@ -75,6 +77,7 @@ function App() {
           localStorage.setItem("jwt", data.token);
           setLoggedIn(true);
           navigate("/movies");
+          setIsAuth(true);
         } else {
           setLoggedIn(false);
         }
@@ -88,7 +91,7 @@ function App() {
     mainApi
       .setUserInfo(name, email)
       .then((user) => {
-        console.log(user)
+        console.log(user);
         setCurrentUser(user.data);
         setStatusUser(200);
       })
@@ -144,18 +147,28 @@ function App() {
           <Route
             path="/signin"
             element={
-              <Login handleLogin={handleLogin} statusLogin={statusLogin} />
+              isAuth ? (
+                <Login handleLogin={handleLogin} statusLogin={statusLogin} />
+              ) : (
+                <Navigate to="/movies" />
+              )
             }
           />
+
           <Route
             path="/signup"
             element={
-              <Register
-                handleRegister={handleRegister}
-                statusRegister={statusRegister}
-              />
+              isAuth ? (
+                <Register
+                  handleRegister={handleRegister}
+                  statusRegister={statusRegister}
+                />
+              ) : (
+                <Navigate to="/movies" />
+              )
             }
           />
+
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>

@@ -18,6 +18,7 @@ function Movies({ loggedIn }) {
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFiltered, setIsFiltered] = useState(false);
+  
 
   const savedSearch = JSON.parse(localStorage.getItem("search") || "{}");
 
