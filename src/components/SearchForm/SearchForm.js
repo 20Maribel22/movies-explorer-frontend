@@ -1,28 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./SearchForm.css";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import search from "../../images/find.svg";
 import find from "../../images/find-icon.svg";
 import useFormValidation from "../../hooks/useFormValidation";
 
-function SearchForm({ onSearchMovies, savedSearch={} }) {
+function SearchForm({ onSearchMovies, savedSearch = {} }) {
   const [errorText, setErrorText] = useState("");
-  const { values, isValid, handleChange } = useFormValidation();
+  const { values, isValid, handleChange,resetForm } = useFormValidation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isValid) {
       onSearchMovies(values);
+      setErrorText('')
     } else {
       setErrorText("Нужно ввеcти ключевое слово.");
     }
   };
 
-const onChangeСheckbox =(e) => {
-  handleChange(e);
-  
 
-}
+
+  const onChangeСheckbox = (e) => {
+  
+    handleChange(e);
+    onSearchMovies({
+      ...values,
+      shorts:e.target.checked
+    })
+  };
+
+  useEffect(()=> {
+  resetForm(savedSearch)
+  },[])
 
   return (
     <section className="search">
@@ -38,7 +48,9 @@ const onChangeСheckbox =(e) => {
             className="search__input"
             type="text"
             name="name"
-            value={values.name || savedSearch.name || ""}
+            minLength={2}
+            required
+            value={values.name || ""}
             onChange={handleChange}
           />
           <button className="search__button" type="subit">
@@ -46,7 +58,7 @@ const onChangeСheckbox =(e) => {
           </button>
         </form>
         <FilterCheckbox
-          filtercheckbox={values.shorts || savedSearch.shorts || false}
+          filtercheckbox={values.shorts || false}
           handleCheckbox={onChangeСheckbox}
         />
       </div>
