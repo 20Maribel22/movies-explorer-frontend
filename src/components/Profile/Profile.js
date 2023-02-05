@@ -11,7 +11,7 @@ function Profile({ loggedIn, onUpdateUser, statusUser, handleLogout }) {
   const [isUserInfo, setIsUserInfo] = useState(false);
 
 
-  const { values, errors, isValid, handleChange, resetFrom } =
+  const { values, errors, isValid, handleChange, resetForm } =
     useFormValidation();
   const { name = currentUser.name, email = currentUser.email } =
     values;
@@ -29,7 +29,7 @@ function Profile({ loggedIn, onUpdateUser, statusUser, handleLogout }) {
     e.preventDefault();
     if (isValid) {
       onUpdateUser(name, email);
-      resetFrom();
+      resetForm();
     }
   }
 

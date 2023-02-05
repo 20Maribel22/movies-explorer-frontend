@@ -18,7 +18,7 @@ function Movies({ loggedIn }) {
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFiltered, setIsFiltered] = useState(false);
-  
+
 
   const savedSearch = JSON.parse(localStorage.getItem("search") || "{}");
 
@@ -106,7 +106,8 @@ function Movies({ loggedIn }) {
     mainApi.saveMovie(newCard).then((savedCard) => {
       const newMovies = moviesApi.saveMovie(savedCard);
       setMovies(newMovies);
-      filter(newMovies);
+      const savedSearch = JSON.parse(localStorage.getItem("search") || "{}");
+      filter(newMovies, savedSearch);
     });
   };
 
@@ -114,7 +115,8 @@ function Movies({ loggedIn }) {
     mainApi.deleteMovie(mainCard._id).then(() => {
       const newMovies = moviesApi.deleteMovie(mainCard._id);
       setMovies(newMovies);
-      filter(newMovies);
+      const savedSearch = JSON.parse(localStorage.getItem("search") || "{}");
+      filter(newMovies, savedSearch);
     });
   };
 
