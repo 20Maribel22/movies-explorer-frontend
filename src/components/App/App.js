@@ -148,9 +148,9 @@ function App() {
             path="/signin"
             element={
               isAuth ? (
-                <Login handleLogin={handleLogin} statusLogin={statusLogin} />
-              ) : (
                 <Navigate to="/movies" />
+              ) : (
+                <Login handleLogin={handleLogin} statusLogin={statusLogin} />
               )
             }
           />
@@ -159,12 +159,12 @@ function App() {
             path="/signup"
             element={
               isAuth ? (
+                <Navigate to="/movies" />
+              ) : (
                 <Register
                   handleRegister={handleRegister}
                   statusRegister={statusRegister}
                 />
-              ) : (
-                <Navigate to="/movies" />
               )
             }
           />
