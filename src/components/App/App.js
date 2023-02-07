@@ -107,7 +107,8 @@ function App() {
     setLoggedIn(false);
     mainApi.setToken("");
     mainApi.clearSavedMovies();
-    moviesApi.clearSavedMovies();
+    moviesApi.clearSavedMovies()
+    setIsAuth(false)
   };
 
   return (
