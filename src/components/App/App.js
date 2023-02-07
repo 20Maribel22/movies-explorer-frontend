@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
+import {
+  Route,
+  Routes,
+  useNavigate,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import "./App.css";
 import Main from "../Main/Main";
 import Movies from "../Movies/Movies";
@@ -22,8 +28,10 @@ function App() {
   const [isAuth, setIsAuth] = useState(false);
 
   let navigate = useNavigate();
+  const location = useLocation();
+  const protectedRoutes = ["/movies", "/saved-movies", "/profile"];
 
-  const tokenCheck = () => {
+  const tokenCheck = (pathname) => {
     const jwt = localStorage.getItem("jwt");
     mainApi.setToken(jwt);
     if (jwt) {
@@ -31,26 +39,26 @@ function App() {
         .getUserInfo()
         .then((user) => {
           if (user) {
-            console.log(user);
             setCurrentUser(user.data);
             setLoggedIn(true);
             setIsAuth(true);
           } else {
-            handleLogout();
+            handleLogout(pathname);
           }
         })
         .catch((err) => {
-          console.log(err);
-          handleLogout();
+          handleLogout(pathname);
         });
     } else {
-      handleLogout();
+      handleLogout(pathname);
     }
   };
 
   useEffect(() => {
-    tokenCheck();
-  }, [loggedIn]);
+    tokenCheck(location.pathname);
+  }, [loggedIn, location.pathname]);
+
+
 
   const handleRegister = (name, email, password) => {
     mainApi
@@ -100,15 +108,18 @@ function App() {
       });
   };
 
-  const handleLogout = () => {
+  const handleLogout = (pathname = "/profile") => {
     localStorage.clear();
     setCurrentUser({});
-    navigate("/");
+
     setLoggedIn(false);
     mainApi.setToken("");
     mainApi.clearSavedMovies();
-    moviesApi.clearSavedMovies()
-    setIsAuth(false)
+    moviesApi.clearSavedMovies();
+    setIsAuth(false);
+    if (protectedRoutes.includes(pathname)) {
+      navigate("/");
+    }
   };
 
   return (
