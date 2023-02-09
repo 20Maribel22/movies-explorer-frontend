@@ -1,35 +1,40 @@
 import "./MoviesCard.css";
-import movie from "../../images/movie.png";
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
 
-function MoviesCard() {
+function MoviesCard({ movie, updateCard }) {
   const { pathname } = useLocation();
-  const [isSaved, setIsSaved] = useState(false);
-  const movieCardButtonClassName = `${
-    pathname === "/movies"
-      ? `movie-card__save-button ${
-          isSaved ? "movie-card__save-button_active" : ""
-        }`
-      : "movie-card__delete-button"
-  }`;
-
-  const handleSaveClick = () => {
-    setIsSaved(!isSaved);
-  };
+  const { nameRU, duration, trailerLink, image, saved } = movie;
+  const durationCalc = `${Math.trunc(duration / 60)}ч ${duration % 60}м`;
 
   return (
     <li className="movie-card">
-      <img className="movie-card__image" src={movie} alt="Фото фильма" />
+      <a
+        className="movie-card__trailer"
+        href={trailerLink}
+        target="_blank"
+        rel="noreferrer"
+      >
+        <img className="movie-card__image" src={image.url ? `https://api.nomoreparties.co${image.url}` : image} alt={nameRU} />
+      </a>
       <div className="movie-card__description">
-        <p className="movie-card__title">33 слова о дизайне</p>
-        <button
-          className={movieCardButtonClassName}
-          type="button"
-          onClick={handleSaveClick}
-        ></button>
+        <p className="movie-card__title">{nameRU}</p>
+        {pathname === "/movies" ? (
+          <button
+            className={`movie-card__save-button ${
+              saved ? "movie-card__save-button_active" : ""
+            }`}
+            type="button"
+            onClick={() => updateCard(movie)}
+          ></button>
+        ) : (
+          <button
+            className="movie-card__delete-button"
+            type="button"
+            onClick={() => updateCard(movie)}
+          ></button>
+        )}
       </div>
-      <p className="movie-card__duration">1ч42м</p>
+      <p className="movie-card__duration">{durationCalc}</p>
     </li>
   );
 }

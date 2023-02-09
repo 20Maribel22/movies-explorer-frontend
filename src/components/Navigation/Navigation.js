@@ -1,10 +1,11 @@
+import React from "react";
 import { Link, NavLink } from "react-router-dom";
-import { useState } from "react";
+
 import "./Navigation.css";
 import icon_profile from "../../images/icon__profile.svg";
 
 function Navigation() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const handleOpenClick = () => {
     setIsOpen(!isOpen);
@@ -27,7 +28,7 @@ function Navigation() {
               <NavLink
                 className={({ isActive }) => `navigation__link
               ${isActive && " navigation__link_active"}`}
-                exact
+                
                 to="/"
               >
                 Главная
