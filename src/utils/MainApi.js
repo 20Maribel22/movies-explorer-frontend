@@ -115,7 +115,7 @@ class MainApi {
 }
 
 export const mainApi = new MainApi({
-  // baseUrl: 'https://api.diploma.maribel.nomoredomains.club',
+ // baseUrl: 'https://api.diploma.maribel.nomoredomains.club',
   baseUrl: "http://localhost:3001",
   headers: {
     Authorization: "",

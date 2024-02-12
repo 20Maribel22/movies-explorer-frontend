@@ -1,5 +1,5 @@
 import "./AboutMe.css";
-import foto from "../../images/pic__COLOR_pic.png";
+import foto from "../../images/photo_2024-02-12_19-27-07.jpg";
 
 function AboutMe() {
   return (
@@ -7,18 +7,15 @@ function AboutMe() {
       <h2 className="section__title">Студент</h2>
       <div className="about-me__info">
         <div className="about-me__description">
-          <h3 className="about-me__title">Виталий</h3>
-          <p className="about-me__subtitle">Фронтенд-разработчик, 30 лет</p>
+          <h3 className="about-me__title">Марина</h3>
+          <p className="about-me__subtitle">Фронтенд-разработчик, 37 лет</p>
           <p className="about-me__text">
-            Я родился и живу в Саратове, закончил факультет экономики СГУ. У
-            меня есть жена и дочь. Я люблю слушать музыку, а ещё увлекаюсь
-            бегом. Недавно начал кодить. С 2015 года работал в компании «СКБ
-            Контур». После того, как прошёл курс по веб-разработке, начал
-            заниматься фриланс-заказами и ушёл с постоянной работы.
+            Я родилась и живу в Бишкеке, закончила факультет экологии и энергосбережения КГУСТА. У
+            меня есть муж и трое детей. Я люблю слушать музыку, ходить в походы,кататься на велосипеде.
           </p>
           <a
             className="about-me__link"
-            href="https://github.com/"
+            href="https://github.com/20Maribel22"
             target="_blank"
             rel="noreferrer"
           >

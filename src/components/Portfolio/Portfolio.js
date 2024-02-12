@@ -8,7 +8,7 @@ function Portfolio() {
         <li className="portfolio__links">
           <a
             className="portfolio__link"
-            href="https://github.com/"
+            href="https://20maribel22.github.io/how-to-learn/"
             target="_blank"
             rel="noreferrer"
           >
@@ -19,7 +19,7 @@ function Portfolio() {
         <li className="portfolio__links">
           <a
             className="portfolio__link"
-            href="https://github.com/"
+            href="https://20maribel22.github.io/russian-travel/"
             target="_blank"
             rel="noreferrer"
           >
@@ -30,7 +30,7 @@ function Portfolio() {
         <li className="portfolio__links">
           <a
             className="portfolio__link"
-            href="https://github.com/"
+            href="https://20maribel22.github.io/sign-in"
             target="_blank"
             rel="noreferrer"
           >
