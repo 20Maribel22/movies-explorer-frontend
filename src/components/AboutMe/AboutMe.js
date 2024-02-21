@@ -1,5 +1,5 @@
 import "./AboutMe.css";
-import foto from "../../images/photo_2024-02-12_19-27-07.jpg";
+import foto from "../../images/photo_2024-02-21_14-36-12.jpg";
 
 function AboutMe() {
   return (

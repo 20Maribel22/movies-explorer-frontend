@@ -116,8 +116,7 @@ class MainApi {
 
 export const mainApi = new MainApi({
  // baseUrl: 'https://api.diploma.maribel.nomoredomains.club',
- // baseUrl: "http://localhost:3001",
- baseUrl: "https://movies-explorer-f863673090f5.herokuapp.com",
+ baseUrl: "http://localhost:3001",
   headers: {
     Authorization: "",
     "Content-Type": "application/json",
