@@ -116,7 +116,8 @@ class MainApi {
 
 export const mainApi = new MainApi({
  // baseUrl: 'https://api.diploma.maribel.nomoredomains.club',
- baseUrl: "http://localhost:3001",
+//  baseUrl: "http://localhost:3001",
+ baseUrl:"movies-explorer-api-snowy.vercel.app",
   headers: {
     Authorization: "",
     "Content-Type": "application/json",
