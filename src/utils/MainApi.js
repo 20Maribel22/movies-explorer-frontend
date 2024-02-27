@@ -116,8 +116,8 @@ class MainApi {
 
 export const mainApi = new MainApi({
  // baseUrl: 'https://api.diploma.maribel.nomoredomains.club',
-//  baseUrl: "http://localhost:3001",
-  baseUrl: "https://movies-explorer-api-nu.vercel.app",
+ // baseUrl: "http://localhost:3001",
+ baseUrl: "https://movies-explorer-api-f1py.onrender.com",
   headers: {
     Authorization: "",
     "Content-Type": "application/json",
